@@ -1,11 +1,11 @@
 import React from "react";
 
 interface TypographyProps {
-  children: React.ReactNode;
-  variant: "h1" | "h2" | "body" | "caption";
-  fontWeight?: "bold" | "medium" | "regular" | "semibold";
-  color: string;
-  className?: string;
+  readonly children: React.ReactNode;
+  readonly variant: "h1" | "h2" | "body" | "caption";
+  readonly fontWeight?: "bold" | "medium" | "regular" | "semibold";
+  readonly color: string;
+  readonly className?: string;
 }
 
 export function Typography({
