@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 interface LogoProps {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
+  readonly src: string;
+  readonly alt: string;
+  readonly width: number;
+  readonly height: number;
 }
 
 export function Logo({ src, alt, width, height }: LogoProps) {

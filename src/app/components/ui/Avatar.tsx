@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 interface AvatarProps {
-  src: string;
-  alt: string;
-  size: number;
+  readonly src: string;
+  readonly alt: string;
+  readonly size: number;
 }
 
 export function Avatar({ src, alt, size }: AvatarProps) {
