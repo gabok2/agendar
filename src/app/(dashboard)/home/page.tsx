@@ -1,8 +1,9 @@
 import { Table } from "@/app/components/Table";
 import { Card } from "./components/Card";
 import { createClient } from "@/app/utils/supabase/server";
+import { ParsedUrlQuery } from "querystring";
 
-const columns = [
+const COLUMNS = [
   { key: "name", label: "Nome" },
   { key: "class", label: "Turma" },
   { key: "responsibleemail1", label: "E-mail responsável 1" },
@@ -10,58 +11,80 @@ const columns = [
   { key: "created_at", label: "Cadastrado em" },
 ];
 
-export default async function Home({
-  searchParams,
-}: {
-  readonly searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const page =
-    typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1;
-  const searchTerm =
-    typeof searchParams.search === "string" ? searchParams.search : "";
+const DEFAULT_PAGE_SIZE = 10;
 
-  const pageSize =
-    typeof searchParams.pageSize === "string"
-      ? parseInt(searchParams.pageSize)
-      : 10;
+interface HomeProps {
+  readonly searchParams: ParsedUrlQuery;
+}
 
-  let PAGE_SIZE = pageSize;
-
+export default async function Home({ searchParams }: HomeProps) {
+  const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
   const supabase = createClient();
 
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
+  const { students, count } = await fetchStudents(
+    supabase,
+    page,
+    pageSize,
+    searchTerm
+  );
+  const totalPages = Math.ceil((count ?? 0) / pageSize);
 
-  let query = supabase
-    .from("students")
-    .select("*", { count: "exact" })
-    .range(from, to);
-
-  if (searchTerm) {
-    query = query.ilike("name", `%${searchTerm}%`);
-  }
-
-  let { data: students, count } = await query;
-
-  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
+  const classTurm = await fetchClassTurm(supabase);
+  const teachers = await fetchTeachers(supabase);
 
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
 
-  let { data: classTurm } = await supabase.from("class").select("*");
+  function parseSearchParams(searchParams: ParsedUrlQuery) {
+    const page = parseInt(searchParams.page as string) || 1;
+    const searchTerm = (searchParams.search as string) || "";
+    const pageSize =
+      parseInt(searchParams.pageSize as string) || DEFAULT_PAGE_SIZE;
+    return { page, searchTerm, pageSize };
+  }
 
-  let { data: teachers } = await supabase
-    .from("teachers")
-    .select(`*, class(name)`);
+  async function fetchStudents(
+    supabase: any,
+    page: number,
+    pageSize: number,
+    searchTerm: string
+  ) {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    let query = supabase
+      .from("students")
+      .select("*", { count: "exact" })
+      .range(from, to);
+
+    if (searchTerm) {
+      query = query.ilike("name", `%${searchTerm}%`);
+    }
+
+    const { data: students, count } = await query;
+    return { students, count };
+  }
+
+  async function fetchClassTurm(supabase: any) {
+    const { data: classTurm } = await supabase.from("class").select("*");
+    return classTurm || [];
+  }
+
+  async function fetchTeachers(supabase: any) {
+    const { data: teachers } = await supabase
+      .from("teachers")
+      .select(`*, class(name)`);
+    return teachers || [];
+  }
 
   return (
-    <div className=" h-full px-12 w-full">
-      <Card classTurm={classTurm || []} teachers={teachers || []} />
+    <div className="h-full px-12 w-full">
+      <Card classTurm={classTurm} teachers={teachers} />
       <Table
-        columns={columns}
-        rows={students || []}
+        columns={COLUMNS}
+        rows={students}
         currentPage={page}
         totalPages={totalPages}
-        itemsPerPage={PAGE_SIZE}
+        itemsPerPage={pageSize}
         baseUrl={baseUrl}
         tableSelected="Alunos"
       />

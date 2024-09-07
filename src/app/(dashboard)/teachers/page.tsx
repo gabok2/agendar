@@ -1,8 +1,9 @@
 import { Table } from "@/app/components/Table";
 import { StatusEnumTeacher } from "@/app/utils/StatusEnum";
 import { createClient } from "@/app/utils/supabase/server";
+import { ParsedUrlQuery } from "querystring";
 
-const columns = [
+const COLUMNS = [
   { key: "name", label: "Nome" },
   { key: "class", label: "Turma" },
   { key: "email", label: "E-mail" },
@@ -10,68 +11,84 @@ const columns = [
   { key: "created_at", label: "Cadastrado em" },
 ];
 
-export default async function Teachers({
-  searchParams,
-}: {
-  readonly searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const page =
-    typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1;
-  const searchTerm =
-    typeof searchParams.search === "string" ? searchParams.search : "";
+const DEFAULT_PAGE_SIZE = 10;
 
-  const pageSize =
-    typeof searchParams.pageSize === "string"
-      ? parseInt(searchParams.pageSize)
-      : 10;
+interface TeachersProps {
+  readonly searchParams: ParsedUrlQuery;
+}
 
-  let PAGE_SIZE = pageSize;
-
+export default async function Teachers({ searchParams }: TeachersProps) {
+  const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
   const supabase = createClient();
 
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
+  const { teachers, count } = await fetchTeachers(
+    supabase,
+    page,
+    pageSize,
+    searchTerm
+  );
+  const totalPages = Math.ceil((count ?? 0) / pageSize);
 
-  let query = supabase.from("teachers").select(
-    `
+  const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
+
+  const updatedTeachers = updateTeachersData(teachers);
+
+  function parseSearchParams(searchParams: ParsedUrlQuery) {
+    const page = parseInt(searchParams.page as string) || 1;
+    const searchTerm = (searchParams.search as string) || "";
+    const pageSize =
+      parseInt(searchParams.pageSize as string) || DEFAULT_PAGE_SIZE;
+    return { page, searchTerm, pageSize };
+  }
+
+  async function fetchTeachers(
+    supabase: any,
+    page: number,
+    pageSize: number,
+    searchTerm: string
+  ) {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    let query = supabase.from("teachers").select(
+      `
     *,
     class (
       name
     )
   `,
-    { count: "exact" }
-  );
+      { count: "exact" }
+    );
 
-  if (searchTerm) {
-    query = query.ilike("name", `%${searchTerm}%`);
+    if (searchTerm) {
+      query = query.ilike("name", `%${searchTerm}%`);
+    }
+
+    const { data: teachers, count } = await query.range(from, to);
+    return { teachers, count };
   }
-  query = query.range(from, to);
 
-  const { data: teachers, count } = await query;
-
-  const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
-
-  const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
-
-  const updatedTeachers = teachers?.map((teacher) => {
-    return {
-      ...teacher,
-      statusTeachers: StatusEnumTeacher({
-        statusEnumTeacher: teacher.status_teacher,
-      }),
-      class: teacher.class?.[0]?.name,
-    };
-  });
+  function updateTeachersData(teachers: any[] | null) {
+    return (
+      teachers?.map((teacher) => ({
+        ...teacher,
+        statusTeachers: StatusEnumTeacher({
+          statusEnumTeacher: teacher.status_teacher,
+        }),
+        class: teacher.class?.[0]?.name,
+      })) || []
+    );
+  }
 
   return (
-    <div className=" h-full px-12 w-full">
+    <div className="h-full px-12 w-full">
       <Table
-        columns={columns}
+        columns={COLUMNS}
         currentPage={page}
         totalPages={totalPages}
-        itemsPerPage={PAGE_SIZE}
+        itemsPerPage={pageSize}
         baseUrl={baseUrl}
-        rows={updatedTeachers || []}
+        rows={updatedTeachers}
       />
     </div>
   );
