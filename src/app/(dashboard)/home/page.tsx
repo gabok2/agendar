@@ -21,27 +21,6 @@ export default async function Home({ searchParams }: HomeProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
   const supabase = createClient();
 
-  const { students, count } = await fetchStudents(
-    supabase,
-    page,
-    pageSize,
-    searchTerm
-  );
-  const totalPages = Math.ceil((count ?? 0) / pageSize);
-
-  const classTurm = await fetchClassTurm(supabase);
-  const teachers = await fetchTeachers(supabase);
-
-  const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
-
-  function parseSearchParams(searchParams: ParsedUrlQuery) {
-    const page = parseInt(searchParams.page as string) || 1;
-    const searchTerm = (searchParams.search as string) || "";
-    const pageSize =
-      parseInt(searchParams.pageSize as string) || DEFAULT_PAGE_SIZE;
-    return { page, searchTerm, pageSize };
-  }
-
   async function fetchStudents(
     supabase: any,
     page: number,
@@ -53,7 +32,15 @@ export default async function Home({ searchParams }: HomeProps) {
 
     let query = supabase
       .from("students")
-      .select("*", { count: "exact" })
+      .select(
+        `
+    *,
+    class (
+      name
+    )
+  `,
+        { count: "exact" }
+      )
       .range(from, to);
 
     if (searchTerm) {
@@ -76,12 +63,44 @@ export default async function Home({ searchParams }: HomeProps) {
     return teachers || [];
   }
 
+  const { students, count } = await fetchStudents(
+    supabase,
+    page,
+    pageSize,
+    searchTerm
+  );
+  const totalPages = Math.ceil((count ?? 0) / pageSize);
+
+  const updatedStudents = updateStudentsData(students);
+
+  const classTurm = await fetchClassTurm(supabase);
+  const teachers = await fetchTeachers(supabase);
+
+  const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
+
+  function parseSearchParams(searchParams: ParsedUrlQuery) {
+    const page = parseInt(searchParams.page as string) || 1;
+    const searchTerm = (searchParams.search as string) || "";
+    const pageSize =
+      parseInt(searchParams.pageSize as string) || DEFAULT_PAGE_SIZE;
+    return { page, searchTerm, pageSize };
+  }
+
+  function updateStudentsData(students: any[] | null) {
+    return (
+      students?.map((student) => ({
+        ...student,
+        class: student.class.name,
+      })) || []
+    );
+  }
+
   return (
     <div className="h-full px-12 w-full">
       <Card classTurm={classTurm} teachers={teachers} />
       <Table
         columns={COLUMNS}
-        rows={students}
+        rows={updatedStudents}
         currentPage={page}
         totalPages={totalPages}
         itemsPerPage={pageSize}
