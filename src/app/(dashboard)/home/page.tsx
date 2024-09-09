@@ -1,7 +1,7 @@
 import { Table } from "@/app/components/Table";
 import { Card } from "./components/Card";
-import { createClient } from "@/app/utils/supabase/server";
 import { ParsedUrlQuery } from "querystring";
+import { fetchClassTurm, fetchStudents, fetchTeachers } from "./endpoints";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -19,62 +19,15 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-  const supabase = createClient();
 
-  async function fetchStudents(
-    supabase: any,
-    page: number,
-    pageSize: number,
-    searchTerm: string
-  ) {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize - 1;
-
-    let query = supabase
-      .from("students")
-      .select(
-        `
-    *,
-    class (
-      name
-    )
-  `,
-        { count: "exact" }
-      )
-      .range(from, to);
-
-    if (searchTerm) {
-      query = query.ilike("name", `%${searchTerm}%`);
-    }
-
-    const { data: students, count } = await query;
-    return { students, count };
-  }
-
-  async function fetchClassTurm(supabase: any) {
-    const { data: classTurm } = await supabase.from("class").select("*");
-    return classTurm || [];
-  }
-
-  async function fetchTeachers(supabase: any) {
-    const { data: teachers } = await supabase
-      .from("teachers")
-      .select(`*, class(name)`);
-    return teachers || [];
-  }
-
-  const { students, count } = await fetchStudents(
-    supabase,
-    page,
-    pageSize,
-    searchTerm
-  );
+  const { students, count } = await fetchStudents(page, pageSize, searchTerm);
   const totalPages = Math.ceil((count ?? 0) / pageSize);
 
   const updatedStudents = updateStudentsData(students);
 
-  const classTurm = await fetchClassTurm(supabase);
-  const teachers = await fetchTeachers(supabase);
+  const classTurm = await fetchClassTurm();
+
+  const teachers = await fetchTeachers();
 
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
 
