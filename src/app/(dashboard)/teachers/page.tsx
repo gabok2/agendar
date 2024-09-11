@@ -42,11 +42,11 @@ export default async function Teachers({ searchParams }: TeachersProps) {
         statusTeachers: StatusEnumTeacher({
           statusEnumTeacher: teacher.status_teacher,
         }),
-        class: teacher.class?.[0]?.name,
+        class: teacher.name ?? "Sem turma",
       })) || []
     );
   }
-
+  console.log(updatedTeachers);
   return (
     <div className="h-full px-12 w-full">
       <Table
