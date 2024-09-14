@@ -13,22 +13,12 @@ import {
   CaretLeft,
   CaretDown,
   CaretUp,
+  EnvelopeSimple,
+  Eye,
+  EyeSlash,
+  Lock,
 } from "@phosphor-icons/react/dist/ssr";
-
-type IconType =
-  | "BookBookmark"
-  | "ChalkboardTeacher"
-  | "Gear"
-  | "GraduationCap"
-  | "House"
-  | "SignOut"
-  | "UsersFour"
-  | "MagnifyingGlass"
-  | "DotsThreeOutlineVertical"
-  | "CaretRight"
-  | "CaretLeft"
-  | "CaretDown"
-  | "CaretUp";
+import { IconType } from "@/app/utils/types/inputTypes";
 
 interface IconsProps {
   readonly type: IconType;
@@ -37,13 +27,7 @@ interface IconsProps {
   readonly className?: string;
 }
 
-export function Icons({
-  type,
-  size = 24,
-
-  className,
-  weight,
-}: IconsProps) {
+export function Icons({ type, size = 24, className, weight }: IconsProps) {
   const iconProps = {
     width: size,
     height: size,
@@ -78,7 +62,14 @@ export function Icons({
       return <CaretDown {...iconProps} />;
     case "CaretUp":
       return <CaretUp {...iconProps} />;
-
+    case "EnvelopeSimple":
+      return <EnvelopeSimple {...iconProps} />;
+    case "Eye":
+      return <Eye {...iconProps} />;
+    case "EyeSlash":
+      return <EyeSlash {...iconProps} />;
+    case "Lock":
+      return <Lock {...iconProps} />;
     default:
       return null;
   }

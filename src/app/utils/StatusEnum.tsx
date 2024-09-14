@@ -1,12 +1,21 @@
 interface StatusEnumProps {
-  statusEnumTeacher: number | string;
+  statusEnum: number | string;
 }
 
-export function StatusEnumTeacher({ statusEnumTeacher }: StatusEnumProps) {
+export function StatusEnumTeacher({ statusEnum }: StatusEnumProps) {
   const options: { [key: string]: string } = {
     0: "Titular",
     1: "Auxiliar",
   };
 
-  return options[statusEnumTeacher];
+  return options[statusEnum];
+}
+
+export function StatusEnumClass({ statusEnum }: StatusEnumProps) {
+  const options: { [key: string]: string } = {
+    0: "Ativa",
+    1: "Planejamento",
+  };
+
+  return options[statusEnum];
 }

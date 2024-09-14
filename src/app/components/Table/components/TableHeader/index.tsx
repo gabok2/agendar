@@ -18,7 +18,7 @@ export const TableHeader = ({ baseUrl, tableSelected }: TableHeaderProps) => {
   return (
     <div className="flex px-6 pb-4 items-center">
       {tableSelected && (
-        <div className="border px-9 py-3 mr-4 border-gray rounded-lg flex items-center justify-center">
+        <div className="border px-9 py-3 mr-4 border-grayPrimary rounded-lg flex items-center justify-center">
           <Typography
             variant="caption"
             color="text-secondary"

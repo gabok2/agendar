@@ -7,8 +7,15 @@ interface TableBodyProps {
     key: string;
     label: string;
   }[];
+  specialColumns?: {
+    [key: string]: (value: string) => { color: string; text: string };
+  };
 }
-export const TableBody = ({ rows, columns }: TableBodyProps) => (
+export const TableBody = ({
+  rows,
+  columns,
+  specialColumns,
+}: TableBodyProps) => (
   <tbody>
     <tr>
       <td colSpan={columns.length + 1}>
@@ -21,6 +28,7 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => (
         row={row}
         columns={columns}
         isEven={index % 2 === 0}
+        specialColumns={specialColumns}
       />
     ))}
     <tr>

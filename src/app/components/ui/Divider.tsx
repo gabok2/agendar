@@ -5,5 +5,7 @@ interface DividerProps {
 }
 
 export const Divider = ({ bottom, top, className }: DividerProps) => (
-  <div className={` w-full h-px bg-gray ${className} ${top} ${bottom}`} />
+  <div
+    className={` w-full h-px bg-grayPrimary ${className} ${top} ${bottom}`}
+  />
 );

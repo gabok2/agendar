@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import React from "react";
+import ToastProvider from "./toastify";
 
 const inter = Inter({
   weight: ["100", "200", "400", "500", "600", "700"],
@@ -21,10 +22,10 @@ export default async function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} bg-background min-h-screen`}
+        className={`${inter.className} bg-background h-screen`}
         suppressHydrationWarning={true}
       >
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

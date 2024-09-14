@@ -1,6 +1,6 @@
 import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
-import { fetchStudents } from "../home/endpoints";
+import { fetchStudents } from "./endpoints";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -18,12 +18,9 @@ interface StudentsProps {
 
 export default async function Students({ searchParams }: StudentsProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-
   const { students, count } = await fetchStudents(page, pageSize, searchTerm);
   const totalPages = Math.ceil((count ?? 0) / pageSize);
-
   const updatedStudents = updateStudentsData(students);
-
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
 
   function parseSearchParams(searchParams: ParsedUrlQuery) {

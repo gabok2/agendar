@@ -19,7 +19,7 @@ const config: Config = {
         background: "#F9F9F9",
         cancel: "#FF0000",
         cancelSecondary: "#DA1414",
-        gray: "#EAEAEA",
+        grayPrimary: "#EAEAEA",
       },
     },
   },

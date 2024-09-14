@@ -9,7 +9,7 @@ interface FilterInputProps {
 
 const FilterInput = ({ placeholder, value, onChange }: FilterInputProps) => {
   return (
-    <div className="flex items-center border w-full border-gray rounded-lg p-3">
+    <div className="flex items-center border w-full border-grayPrimary rounded-lg p-3">
       <Icons
         type="MagnifyingGlass"
         size={14}
