@@ -1,7 +1,7 @@
 import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
-import { fetchClasses } from "./endpoints";
 import { StatusEnumClass } from "@/app/utils/StatusEnum";
+import { fetchClasses } from "./endpoints";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -21,14 +21,10 @@ interface ClassesProps {
 
 export default async function Classes({ searchParams }: ClassesProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-
   const { classes, count } = await fetchClasses(page, pageSize, searchTerm);
   const totalPages = Math.ceil((count ?? 0) / pageSize);
-
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
-
   const updatedClasses = updateClassesData(classes);
-
   const specialColumns = {
     status: (value: string) => {
       if (value === "Ativa") {

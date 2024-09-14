@@ -19,12 +19,9 @@ interface TeachersProps {
 
 export default async function Teachers({ searchParams }: TeachersProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-
   const { teachers, count } = await fetchTeachers(page, pageSize, searchTerm);
   const totalPages = Math.ceil((count ?? 0) / pageSize);
-
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
-
   const updatedTeachers = updateTeachersData(teachers);
 
   function parseSearchParams(searchParams: ParsedUrlQuery) {

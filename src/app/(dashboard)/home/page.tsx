@@ -19,16 +19,11 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-
   const { students, count } = await fetchStudents(page, pageSize, searchTerm);
   const totalPages = Math.ceil((count ?? 0) / pageSize);
-
   const updatedStudents = updateStudentsData(students);
-
   const classTurm = await fetchClassTurm();
-
   const teachers = await fetchTeachers();
-
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
 
   function parseSearchParams(searchParams: ParsedUrlQuery) {
@@ -47,7 +42,7 @@ export default async function Home({ searchParams }: HomeProps) {
       })) || []
     );
   }
-  console.log(updatedStudents);
+
   return (
     <div className="h-full px-12 w-full">
       <Card classTurm={classTurm} teachers={teachers} />

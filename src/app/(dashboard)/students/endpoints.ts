@@ -1,7 +1,7 @@
 import { createClient } from "@/app/utils/supabase/server";
 import { cookies } from "next/headers";
 
-export async function fetchTeachers(
+export async function fetchStudents(
   page: number,
   pageSize: number,
   searchTerm: string
@@ -11,20 +11,15 @@ export async function fetchTeachers(
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  let query = supabase.from("teachers").select(
-    `
-    *,
-    class:class_id (
-      name
-    )
-  `,
-    { count: "exact" }
-  );
+  let query = supabase
+    .from("students")
+    .select(`*, class (name)`, { count: "exact" })
+    .range(from, to);
 
   if (searchTerm) {
     query = query.ilike("name", `%${searchTerm}%`);
   }
 
-  const { data: teachers, count } = await query.range(from, to);
-  return { teachers, count };
+  const { data: students, count } = await query;
+  return { students, count };
 }

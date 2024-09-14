@@ -1,12 +1,16 @@
 import { createClient } from "@/app/utils/supabase/server";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
 
-const supabase = createClient();
+let supabase: SupabaseClient;
 
 export async function fetchStudents(
   page: number,
   pageSize: number,
   searchTerm: string
 ) {
+  const cookieStore = cookies();
+  supabase = createClient(cookieStore);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -37,8 +41,9 @@ export async function fetchClassTurm() {
 }
 
 export async function fetchTeachers() {
-  const { data: teachers } = await supabase
-    .from("teachers")
-    .select(`*, class(name)`);
+  const { data: teachers } = await supabase.from("teachers")
+    .select(`*, class:class_id (
+      name
+    )`);
   return teachers || [];
 }

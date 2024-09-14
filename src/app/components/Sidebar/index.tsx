@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/app/utils/supabase/client";
 
+const supabase = createClient();
 import { Icons } from "../ui/icons";
 
 interface MenuItem {
@@ -12,6 +14,11 @@ interface MenuItem {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -75,12 +82,14 @@ export function Sidebar() {
     <div className="px-7 sticky top-0  bg-white h-screen flex flex-col justify-between items-center pb-16 shadow-lg z-50 w-64  ">
       <div className="flex-grow">{menuItems.map(renderMenuItem)}</div>
       <div className="mt-auto">
-        <Icons
-          type="SignOut"
-          size={30}
-          className="text-cancel cursor-pointer"
-          weight="fill"
-        />
+        <button onClick={handleSignOut}>
+          <Icons
+            type="SignOut"
+            size={30}
+            className="text-cancel cursor-pointer"
+            weight="fill"
+          />
+        </button>
       </div>
     </div>
   );

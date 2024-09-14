@@ -3,12 +3,12 @@ import { Input } from "@/app/components/ui/Input";
 import { Typography } from "@/app/components/ui/Typography";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { loginUser } from "./endpoint";
 import { loginSchema, FormDataLogin } from "@/app/utils/schemas/LoginForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/app/components/ui/Button";
 import { useState } from "react";
+import { login } from "./endpoint";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,10 +35,16 @@ export function LoginForm() {
     }
   };
 
+  async function loginUser(email: string, password: string) {
+    const { user } = await login(email, password);
+
+    return user;
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-md px-8 py-11 w-full md:w-6/12 lg:w-5/12 xl:w-4/12 2xl:w-2/12  rounded-xl flex flex-col items-center "
+      className="bg-white  shadow-md px-8 py-11 w-full md:w-6/12 lg:w-5/12 xl:w-4/12 2xl:w-2/12  rounded-xl flex flex-col items-center "
     >
       <Image src="/icon.svg" alt="logo" width={55} height={55} />
       <Typography

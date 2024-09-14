@@ -1,12 +1,13 @@
 import { createClient } from "@/app/utils/supabase/server";
-
-const supabase = createClient();
+import { cookies } from "next/headers";
 
 export async function fetchClasses(
   page: number,
   pageSize: number,
   searchTerm: string
 ) {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
