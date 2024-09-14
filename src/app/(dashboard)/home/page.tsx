@@ -47,7 +47,7 @@ export default async function Home({ searchParams }: HomeProps) {
       })) || []
     );
   }
-
+  console.log(updatedStudents);
   return (
     <div className="h-full px-12 w-full">
       <Card classTurm={classTurm} teachers={teachers} />

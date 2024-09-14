@@ -1,7 +1,7 @@
 import { Popover } from "@/app/components/Popover";
 import { Icons } from "@/app/components/ui/icons";
 import { Typography } from "@/app/components/ui/Typography";
-import { DateFormat } from "@/app/utils/dateFormat";
+import { DateFormat } from "@/app/utils/DateFormat";
 
 interface TableRowProps {
   row: Record<string, string>;
@@ -10,6 +10,9 @@ interface TableRowProps {
     label: string;
   }[];
   isEven: boolean;
+  specialColumns?: {
+    [key: string]: (value: string) => { color: string; text: string };
+  };
 }
 
 const items = [
@@ -23,17 +26,28 @@ const items = [
   },
 ];
 
-export const TableRow = ({ row, columns, isEven }: TableRowProps) => (
+export const TableRow = ({
+  row,
+  columns,
+  isEven,
+  specialColumns,
+}: TableRowProps) => (
   <tr className={isEven ? "bg-white" : "bg-background"}>
-    {columns.map((column) => (
-      <td key={column.key} className="py-5 px-6">
-        <Typography variant="body" color="text-gray-800" fontWeight="semibold">
-          {column.key === "created_at"
-            ? DateFormat(row[column.key])
-            : row[column.key]}
-        </Typography>
-      </td>
-    ))}
+    {columns.map((column) => {
+      const cellValue = row[column.key];
+      const specialColumn = specialColumns && specialColumns[column.key];
+      const { color, text } = specialColumn
+        ? specialColumn(cellValue)
+        : { color: "text-gray-800", text: cellValue };
+
+      return (
+        <td key={column.key} className="py-5 px-6">
+          <Typography variant="body" color={color} fontWeight="semibold">
+            {column.key === "created_at" ? DateFormat(text) : text}
+          </Typography>
+        </td>
+      );
+    })}
     <td className="py-5 flex justify-end pr-6">
       <Popover itens={items}>
         <Icons

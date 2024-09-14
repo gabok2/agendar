@@ -40,13 +40,13 @@ export default async function Teachers({ searchParams }: TeachersProps) {
       teachers?.map((teacher) => ({
         ...teacher,
         statusTeachers: StatusEnumTeacher({
-          statusEnumTeacher: teacher.status_teacher,
+          statusEnum: teacher.status_teacher,
         }),
-        class: teacher.name ?? "Sem turma",
+        class: teacher.class?.name || "Sem turma",
       })) || []
     );
   }
-  console.log(updatedTeachers);
+
   return (
     <div className="h-full px-12 w-full">
       <Table

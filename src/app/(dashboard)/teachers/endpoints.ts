@@ -13,7 +13,9 @@ export async function fetchTeachers(
   let query = supabase.from("teachers").select(
     `
     *,
-    class:class_id (name)
+    class:class_id (
+      name
+    )
   `,
     { count: "exact" }
   );

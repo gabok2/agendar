@@ -21,7 +21,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-br">
       <body
-        className={`${inter.className} bg-background min-h-screen`}
+        className={`${inter.className} bg-background h-screen`}
         suppressHydrationWarning={true}
       >
         {children}

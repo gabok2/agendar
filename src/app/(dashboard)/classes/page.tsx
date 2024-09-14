@@ -1,6 +1,7 @@
 import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
 import { fetchClasses } from "./endpoints";
+import { StatusEnumClass } from "@/app/utils/StatusEnum";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -28,6 +29,17 @@ export default async function Classes({ searchParams }: ClassesProps) {
 
   const updatedClasses = updateClassesData(classes);
 
+  const specialColumns = {
+    status: (value: string) => {
+      if (value === "Ativa") {
+        return { color: "text-green-400", text: value };
+      } else if (value === "Planejamento") {
+        return { color: "text-primary", text: value };
+      }
+      return { color: "text-gray-800", text: value };
+    },
+  };
+
   function parseSearchParams(searchParams: ParsedUrlQuery) {
     const page = parseInt(searchParams.page as string) || 1;
     const searchTerm = (searchParams.search as string) || "";
@@ -42,11 +54,10 @@ export default async function Classes({ searchParams }: ClassesProps) {
         ...classItem,
         head_teacher: classItem.head_teacher?.name ?? "Sem Titular",
         assistant: classItem.assistant?.name ?? "Sem Auxiliar",
+        status: StatusEnumClass({ statusEnum: classItem.status }),
       })) || []
     );
   }
-
-  console.log(updatedClasses);
 
   return (
     <div className="h-full px-12 w-full">
@@ -57,6 +68,7 @@ export default async function Classes({ searchParams }: ClassesProps) {
         itemsPerPage={pageSize}
         baseUrl={baseUrl}
         rows={updatedClasses}
+        specialColumns={specialColumns}
       />
     </div>
   );

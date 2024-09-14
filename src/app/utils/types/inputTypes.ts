@@ -1,0 +1,18 @@
+export type IconType =
+  | "BookBookmark"
+  | "ChalkboardTeacher"
+  | "Gear"
+  | "GraduationCap"
+  | "House"
+  | "SignOut"
+  | "UsersFour"
+  | "MagnifyingGlass"
+  | "DotsThreeOutlineVertical"
+  | "CaretRight"
+  | "CaretLeft"
+  | "CaretDown"
+  | "CaretUp"
+  | "EnvelopeSimple"
+  | "Eye"
+  | "EyeSlash"
+  | "Lock";
