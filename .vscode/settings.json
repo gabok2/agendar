@@ -1,3 +1,7 @@
 {
-  "conventionalCommits.scopes": ["g"]
+  "conventionalCommits.scopes": ["g"],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "gabok2",
+    "projectKey": "gabok2_agendar"
+  }
 }
