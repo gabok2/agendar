@@ -29,7 +29,7 @@ export function Table({
   specialColumns,
 }: TableProps) {
   return (
-    <section className="mt-4 pt-4 mb-6  w-full    bg-white rounded-lg shadow-sm">
+    <section className="mt-4 pt-4 mb-6 w-ful bg-white rounded-lg shadow-sm">
       <TableHeader baseUrl={baseUrl} tableSelected={tableSelected} />
       <section className="overflow-x-auto">
         <table className="w-full overflow-x-auto">

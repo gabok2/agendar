@@ -1,6 +1,7 @@
 import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
 import { fetchStudents } from "./endpoints";
+import { ModalStudents } from "./components/ModalStudents";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -49,8 +50,8 @@ export default async function Students({ searchParams }: StudentsProps) {
         totalPages={totalPages}
         itemsPerPage={pageSize}
         baseUrl={baseUrl}
-        tableSelected="Alunos"
       />
+      <ModalStudents />
     </div>
   );
 }

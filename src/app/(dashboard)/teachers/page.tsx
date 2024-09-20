@@ -2,6 +2,7 @@ import { Table } from "@/app/components/Table";
 import { StatusEnumTeacher } from "@/app/utils/StatusEnum";
 import { ParsedUrlQuery } from "querystring";
 import { fetchTeachers } from "./endpoints";
+import { ModalTeachers } from "./components/ModalTeachers";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -54,6 +55,7 @@ export default async function Teachers({ searchParams }: TeachersProps) {
         baseUrl={baseUrl}
         rows={updatedTeachers}
       />
+      <ModalTeachers />
     </div>
   );
 }

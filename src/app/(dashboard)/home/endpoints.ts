@@ -1,4 +1,4 @@
-import { createClient } from "@/app/utils/supabase/server";
+import { createClientServer } from "@/app/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
@@ -10,7 +10,7 @@ export async function fetchStudents(
   searchTerm: string
 ) {
   const cookieStore = cookies();
-  supabase = createClient(cookieStore);
+  supabase = createClientServer(cookieStore);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
