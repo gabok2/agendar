@@ -13,7 +13,7 @@ interface TableProps {
   readonly totalPages: number;
   readonly itemsPerPage: number;
   readonly baseUrl: URLSearchParams;
-  readonly tableSelected?: string;
+  tableSelected?: string;
   readonly specialColumns?: {
     [key: string]: (value: string) => { color: string; text: string };
   };
