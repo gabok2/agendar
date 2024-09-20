@@ -15,4 +15,5 @@ export type IconType =
   | "EnvelopeSimple"
   | "Eye"
   | "EyeSlash"
-  | "Lock";
+  | "Lock"
+  | "X";

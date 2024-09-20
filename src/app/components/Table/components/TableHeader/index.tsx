@@ -15,6 +15,15 @@ export const TableHeader = ({ baseUrl, tableSelected }: TableHeaderProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const pathName = usePathname();
   const handleSearch = useHandleSearch();
+  const getPlaceholderText = (path: string) => {
+    if (path === "/teachers") return "Buscar professor";
+    if (path === "/students") return "Buscar aluno";
+    if (path === "/classes") return "Buscar turma";
+    return "Buscar aluno";
+  };
+
+  const placeholderText = getPlaceholderText(pathName);
+
   return (
     <div className="flex px-6 pb-4 items-center">
       {tableSelected && (
@@ -30,12 +39,12 @@ export const TableHeader = ({ baseUrl, tableSelected }: TableHeaderProps) => {
       )}
       <div className=" flex flex-1 w-full">
         <FilterInput
-          placeholder="Buscar aluno"
+          placeholder={placeholderText}
           value={searchTerm}
           onChange={setSearchTerm}
         />
       </div>
-      <div className="pl-12">
+      <div className="pl-12 flex items-center">
         <Button
           color="blue"
           variant="filled"
@@ -48,6 +57,9 @@ export const TableHeader = ({ baseUrl, tableSelected }: TableHeaderProps) => {
           }
         >
           Buscar
+        </Button>
+        <Button className="ml-4" color="blue" variant="outlined">
+          Cadastrar
         </Button>
       </div>
     </div>

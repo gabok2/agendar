@@ -17,6 +17,7 @@ import {
   Eye,
   EyeSlash,
   Lock,
+  X,
 } from "@phosphor-icons/react/dist/ssr";
 import { IconType } from "@/app/utils/types/inputTypes";
 
@@ -70,6 +71,8 @@ export function Icons({ type, size = 24, className, weight }: IconsProps) {
       return <EyeSlash {...iconProps} />;
     case "Lock":
       return <Lock {...iconProps} />;
+    case "X":
+      return <X {...iconProps} />;
     default:
       return null;
   }

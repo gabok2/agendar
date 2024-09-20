@@ -28,18 +28,12 @@ export function LoginForm() {
 
   const onSubmit: SubmitHandler<FormDataLogin> = async (data) => {
     try {
-      await loginUser(data.email, data.password);
+      await login(data.email, data.password);
       router.push("/home");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
     }
   };
-
-  async function loginUser(email: string, password: string) {
-    const { user } = await login(email, password);
-
-    return user;
-  }
 
   return (
     <form
