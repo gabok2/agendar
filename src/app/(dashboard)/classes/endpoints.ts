@@ -1,4 +1,4 @@
-import { createClient } from "@/app/utils/supabase/server";
+import { createClientServer } from "@/app/utils/supabase/server";
 import { cookies } from "next/headers";
 
 export async function fetchClasses(
@@ -7,7 +7,7 @@ export async function fetchClasses(
   searchTerm: string
 ) {
   const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createClientServer(cookieStore);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
