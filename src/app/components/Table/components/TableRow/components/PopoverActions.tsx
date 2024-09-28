@@ -5,7 +5,6 @@ import { Icons } from "@/app/components/ui/icons";
 import { usePathname } from "next/navigation";
 import { deleteStudent } from "./endpoint";
 import { useCallback } from "react";
-
 import { useStore } from "@/app/store";
 
 const items = [
@@ -19,15 +18,16 @@ const items = [
   },
 ];
 
-export const PopoverActions = ({ id }: { id: string }) => {
-  const { setIsOpen } = useStore((state) => state);
+export const PopoverActions = ({ id, row }: { id: string; row: any }) => {
+  const { setIsOpen, setObjetcStructure } = useStore((state) => state);
   const pathName = usePathname();
-
   const itensSelected = useCallback(
     async (id: string, label: string, pathName: string) => {
+      console.log(id);
       if (label === "Excluir") {
         await deleteStudent(id, pathName);
       } else {
+        setObjetcStructure(row.id === id ? row : {});
         setIsOpen(true);
       }
     },

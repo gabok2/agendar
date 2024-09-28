@@ -1,6 +1,7 @@
 import { Typography } from "@/app/components/ui/Typography";
-import { DateFormat } from "@/app/utils/DateFormat";
+
 import { PopoverActions } from "./components/PopoverActions";
+import { DateFormat } from "@/app/utils/dateFormat";
 
 interface TableRowProps {
   row: Record<string, string>;
@@ -35,7 +36,7 @@ export const TableRow = ({
       );
     })}
     <td className="py-5 flex justify-end pr-6">
-      <PopoverActions id={row.id} />
+      <PopoverActions id={row.id} row={row} />
     </td>
   </tr>
 );
