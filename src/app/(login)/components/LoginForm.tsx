@@ -21,6 +21,7 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormDataLogin>({
     resolver: zodResolver(loginSchema),
@@ -60,6 +61,7 @@ export function LoginForm() {
 
       <div className="flex flex-col w-full space-y-8  pt-14">
         <Input
+          setValue={setValue}
           placeholder="abc@email.com"
           label="Email"
           icon="EnvelopeSimple"
@@ -68,6 +70,7 @@ export function LoginForm() {
           error={errors.email?.message}
         />
         <Input
+          setValue={setValue}
           icon="Lock"
           type="password"
           placeholder="Sua senha"
