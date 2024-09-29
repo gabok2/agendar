@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const editStudentsSchema = z.object({
-  emailResponsible1: z
+  responsibleemail1: z
     .string()
     .email("Email inválido")
     .min(1, "Email Responsável 1 é obrigatório"),
-  emailResponsible2: z
+  responsibleemail2: z
     .string()
     .email("Email inválido")
     .min(1, "Email Responsável 2 é obrigatório"),
