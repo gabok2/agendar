@@ -1,16 +1,11 @@
-import { createClient } from "@/app/utils/supabase/client";
+import { createClientServer } from "@/app/utils/supabase/server";
+import { cookies } from "next/headers";
 
-export async function deleteStudent(id: string, pathName: string) {
-  const supabase = createClient();
+export async function deleteTableRow(id: string, pathName: string) {
+  const cookieStore = cookies();
+  const supabase = createClientServer(cookieStore);
 
-  console.log(`Endpoint path: ${pathName.slice(1)}`);
-  console.log(`ID to delete: ${id}`);
-
-  await supabase
-    .from(`${pathName.slice(1)}`)
-    .delete()
-    .eq("id", id)
-    .single();
+  await supabase.from(`${pathName}`).delete().eq("id", id).single();
 
   return { message: "Estudante excluído com sucesso!" };
 }
