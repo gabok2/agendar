@@ -1,12 +1,9 @@
 "use client";
-import { Modal } from "@/app/components/Modal";
 import { useStore } from "@/app/store";
+import { ModalStudentsForm } from "./ModalStudentsForm";
 
 export function ModalStudents() {
-  const { isOpen, setIsOpen } = useStore((state) => state);
-  return (
-    <Modal title="Cadastrar aluno(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <p>estudante</p>
-    </Modal>
-  );
+  const { isOpen } = useStore((state) => state);
+
+  return isOpen && <ModalStudentsForm />;
 }

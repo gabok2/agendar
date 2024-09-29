@@ -1,6 +1,5 @@
 import { createClientServer } from "@/app/utils/supabase/server";
 import { cookies } from "next/headers";
-import { createClient } from "@/app/utils/supabase/client";
 
 export async function fetchStudents(
   page: number,
@@ -26,7 +25,8 @@ export async function fetchStudents(
 }
 
 export async function deleteStudent(id: string) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClientServer(cookieStore);
 
   const { error } = await supabase.from("students").delete().eq("id", id);
 
@@ -35,4 +35,23 @@ export async function deleteStudent(id: string) {
   }
 
   return { message: "Estudante excluído com sucesso!" };
+}
+
+export async function updateStudent(
+  id: string,
+  updatedData: Record<string, any>
+) {
+  const cookieStore = cookies();
+  const supabase = createClientServer(cookieStore);
+
+  const { error } = await supabase
+    .from("students")
+    .update(updatedData)
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Erro ao atualizar o estudante: ${error.message}`);
+  }
+
+  return { message: "Estudante atualizado com sucesso!" };
 }

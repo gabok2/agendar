@@ -1,18 +1,26 @@
 import { Typography } from "@/app/components/ui/Typography";
-import { DateFormat } from "@/app/utils/DateFormat";
 import { PopoverActions } from "./components/PopoverActions";
+import { DateFormat } from "@/app/utils/DateFormat";
+import { Student } from "@/app/utils/types/student";
+import { Teacher } from "@/app/utils/types/teacher";
+import { Class } from "@/app/utils/types/class";
+
+interface Column {
+  key: string;
+  label: string;
+}
+
+interface SpecialColumn {
+  [key: string]: (value: string) => { color: string; text: string };
+}
 
 interface TableRowProps {
-  row: Record<string, string>;
-  columns: {
-    key: string;
-    label: string;
-  }[];
+  row: Student | Teacher | Class | null;
+  columns: Column[];
   isEven: boolean;
-  specialColumns?: {
-    [key: string]: (value: string) => { color: string; text: string };
-  };
+  specialColumns?: SpecialColumn;
 }
+
 export const TableRow = ({
   row,
   columns,
@@ -21,11 +29,11 @@ export const TableRow = ({
 }: TableRowProps) => (
   <tr className={isEven ? "bg-white" : "bg-background"}>
     {columns.map((column) => {
-      const cellValue = row[column.key];
+      const cellValue = row ? row[column.key as keyof typeof row] : "";
       const specialColumn = specialColumns?.[column.key];
       const { color, text } = specialColumn
-        ? specialColumn(cellValue)
-        : { color: "text-gray-800", text: cellValue };
+        ? specialColumn(cellValue as string)
+        : { color: "text-gray-800", text: cellValue as string };
       return (
         <td key={column.key} className="py-5 px-6">
           <Typography variant="body" color={color} fontWeight="semibold">
@@ -35,7 +43,7 @@ export const TableRow = ({
       );
     })}
     <td className="py-5 flex justify-end pr-6">
-      <PopoverActions id={row.id} />
+      {row && <PopoverActions id={row.id} row={row} />}
     </td>
   </tr>
 );

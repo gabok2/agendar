@@ -1,16 +1,24 @@
 import { Divider } from "@/app/components/ui/Divider";
 import { TableRow } from "../TableRow";
+import { Student } from "@/app/utils/types/student";
+import { Teacher } from "@/app/utils/types/teacher";
+import { Class } from "@/app/utils/types/class";
+
+interface Column {
+  key: string;
+  label: string;
+}
+
+interface SpecialColumn {
+  [key: string]: (value: string) => { color: string; text: string };
+}
 
 interface TableBodyProps {
-  rows: Record<string, string>[];
-  columns: {
-    key: string;
-    label: string;
-  }[];
-  specialColumns?: {
-    [key: string]: (value: string) => { color: string; text: string };
-  };
+  rows: (Student | Teacher | Class)[];
+  columns: Column[];
+  specialColumns?: SpecialColumn;
 }
+
 export const TableBody = ({
   rows,
   columns,
