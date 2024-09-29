@@ -2,7 +2,6 @@ import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
 import { fetchStudents } from "./endpoints";
 import { ModalStudents } from "./components/ModalStudents";
-import { useStore } from "@/app/store";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
