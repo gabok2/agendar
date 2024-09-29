@@ -1,15 +1,18 @@
 import { create } from "zustand";
+import { Student } from "../utils/types/student";
+import { Teacher } from "../utils/types/teacher";
+import { Class } from "../utils/types/class";
 
 interface Store {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  objectStructure: { [key: string]: string };
-  setObjetcStructure: (object: { [key: string]: string }) => void;
+  objectStructure: Student | Teacher | Class | null;
+  setObjectStructure: (object: Student | Teacher | Class | null) => void;
 }
 
 export const useStore = create<Store>((set) => ({
   isOpen: false,
   setIsOpen: (value) => set({ isOpen: value }),
-  objectStructure: {},
-  setObjetcStructure: (object) => set({ objectStructure: object }),
+  objectStructure: null,
+  setObjectStructure: (object) => set({ objectStructure: object }),
 }));
