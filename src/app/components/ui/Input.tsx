@@ -1,5 +1,11 @@
-import React, { InputHTMLAttributes } from "react";
-import { UseFormRegister, FieldValues, Path } from "react-hook-form";
+import React, { ChangeEvent, InputHTMLAttributes } from "react";
+import {
+  UseFormRegister,
+  FieldValues,
+  Path,
+  UseFormSetValue,
+  PathValue,
+} from "react-hook-form";
 import { Icons } from "./icons";
 import { IconType } from "@/app/utils/types/inputTypes";
 
@@ -13,6 +19,8 @@ interface InputProps<TFieldValues extends FieldValues>
   placeholder?: string;
   type?: string;
   showPassword?: boolean;
+  inputMask?: (value: string) => string;
+  setValue: UseFormSetValue<TFieldValues>;
   togglePasswordVisibility?: () => void;
 }
 
@@ -26,7 +34,9 @@ export function Input<TFieldValues extends FieldValues>({
   placeholder,
   type = "text",
   showPassword,
+  inputMask,
   togglePasswordVisibility,
+  setValue,
   ...rest
 }: Readonly<InputProps<TFieldValues>>) {
   const baseClasses =
@@ -39,6 +49,16 @@ export function Input<TFieldValues extends FieldValues>({
   `;
 
   const inputType = type === "password" && showPassword ? "text" : type;
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    if (inputMask) {
+      value = inputMask(value);
+    }
+    setValue(name, value as PathValue<TFieldValues, Path<TFieldValues>>, {
+      shouldValidate: true,
+    });
+  };
 
   return (
     <div className="w-full">
@@ -57,14 +77,28 @@ export function Input<TFieldValues extends FieldValues>({
             className="text-gray-400 mr-2"
           />
         )}
-        <input
-          id={name}
-          placeholder={placeholder}
-          {...register(name)}
-          type={inputType}
-          className="w-full text-xs text-gray-400 bg-inherit focus:outline-none "
-          {...rest}
-        />
+        {inputMask && (
+          <input
+            id={name}
+            placeholder={placeholder}
+            {...register(name, { onChange: handleChange })}
+            type={inputType}
+            className="w-full text-xs text-gray-400 bg-inherit focus:outline-none "
+            {...rest}
+          />
+        )}
+
+        {!inputMask && (
+          <input
+            id={name}
+            placeholder={placeholder}
+            {...register(name)}
+            type={inputType}
+            className="w-full text-xs text-gray-400 bg-inherit focus:outline-none "
+            {...rest}
+          />
+        )}
+
         {type === "password" && (
           <button
             type="button"
