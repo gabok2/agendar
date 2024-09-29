@@ -2,9 +2,12 @@ import { TableHeaderColumns } from "./components/TableHeaderColumns";
 import { TableHeader } from "./components/TableHeader";
 import { TableBody } from "./components/TableBody";
 import { TableFooter } from "./components/TableFooter";
+import { Student } from "@/app/utils/types/student";
+import { Teacher } from "@/app/utils/types/teacher";
+import { Class } from "@/app/utils/types/class";
 
 interface TableProps {
-  readonly rows: Record<string, string>[];
+  readonly rows: (Student | Teacher | Class)[];
   readonly columns: {
     key: string;
     label: string;
@@ -13,7 +16,7 @@ interface TableProps {
   readonly totalPages: number;
   readonly itemsPerPage: number;
   readonly baseUrl: URLSearchParams;
-  tableSelected?: string;
+  readonly tableSelected?: string;
   readonly specialColumns?: {
     [key: string]: (value: string) => { color: string; text: string };
   };
