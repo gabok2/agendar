@@ -1,9 +1,9 @@
 import { Typography } from "@/app/components/ui/Typography";
 import { PopoverActions } from "./components/PopoverActions";
-import { DateFormat } from "@/app/utils/DateFormat";
 import { Student } from "@/app/utils/types/student";
 import { Teacher } from "@/app/utils/types/teacher";
 import { Class } from "@/app/utils/types/class";
+import { DateFormat } from "@/app/utils/dateFormat";
 
 interface Column {
   key: string;
@@ -43,7 +43,7 @@ export const TableRow = ({
       );
     })}
     <td className="py-5 flex justify-end pr-6">
-      {row && <PopoverActions id={row.id} row={row} />}
+      {row && <PopoverActions id={String(row.id)} row={row} />}
     </td>
   </tr>
 );

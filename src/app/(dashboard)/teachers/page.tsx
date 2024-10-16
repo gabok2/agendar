@@ -1,8 +1,10 @@
 import { Table } from "@/app/components/Table";
 import { StatusEnumTeacher } from "@/app/utils/StatusEnum";
 import { ParsedUrlQuery } from "querystring";
-import { fetchTeachers } from "./endpoints";
+import { fetchTeachers, fetchTeachersStatus } from "./endpoints";
 import { ModalTeachers } from "./components/ModalTeachers";
+import { StatusEnumTeacherProps } from "@/app/utils/types/statusTeacher";
+import { Teacher } from "@/app/utils/types/teacher";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -21,6 +23,9 @@ interface TeachersProps {
 export default async function Teachers({ searchParams }: TeachersProps) {
   const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
   const { teachers, count } = await fetchTeachers(page, pageSize, searchTerm);
+  const teachersStatus =
+    (await fetchTeachersStatus()) as StatusEnumTeacherProps[];
+
   const totalPages = Math.ceil((count ?? 0) / pageSize);
   const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
   const updatedTeachers = updateTeachersData(teachers);
@@ -33,14 +38,17 @@ export default async function Teachers({ searchParams }: TeachersProps) {
     return { page, searchTerm, pageSize };
   }
 
-  function updateTeachersData(teachers: any[] | null) {
+  function updateTeachersData(teachers: Teacher[] | null) {
     return (
       teachers?.map((teacher) => ({
         ...teacher,
         statusTeachers: StatusEnumTeacher({
           statusEnum: teacher.status_teacher,
         }),
-        class: teacher.class?.name || "Sem turma",
+        class:
+          typeof teacher.class === "string"
+            ? teacher.class
+            : teacher.class?.name || "Sem turma",
       })) || []
     );
   }
@@ -55,7 +63,7 @@ export default async function Teachers({ searchParams }: TeachersProps) {
         baseUrl={baseUrl}
         rows={updatedTeachers}
       />
-      <ModalTeachers />
+      <ModalTeachers teachersStatus={teachersStatus} />
     </div>
   );
 }

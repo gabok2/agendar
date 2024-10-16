@@ -6,6 +6,7 @@ export const teacherEditSchema = z.object({
   birthDate: z.string().min(1, "Data de Nascimento é obrigatória"),
   nationalId: z.string().min(1, "CPF é obrigatório"),
   academic: z.string().min(1, "Formação é obrigatória"),
+  statusEnum: z.number(),
 });
 
 export type TeacherEdit = z.infer<typeof teacherEditSchema>;

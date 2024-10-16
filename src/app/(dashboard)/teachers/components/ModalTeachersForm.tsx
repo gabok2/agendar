@@ -4,25 +4,32 @@ import { Input } from "@/app/components/ui/Input";
 import { InputSelect } from "@/app/components/ui/InputSelect";
 
 import { useStore } from "@/app/store";
-import { DateFormat } from "@/app/utils/DateFormat";
+import { DateFormat } from "@/app/utils/dateFormat";
 import { maskCPF, maskDate } from "@/app/utils/Masks";
 import {
   TeacherEdit,
   teacherEditSchema,
 } from "@/app/utils/schemas/TeacherEdit";
+import { StatusEnumTeacherProps } from "@/app/utils/types/statusTeacher";
 import { Teacher } from "@/app/utils/types/teacher";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { parse } from "date-fns";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { updateTeacherAction } from "./actions/updateTeacher";
 
-export function ModalTeachersForm() {
+interface ModalTeachersFormProps {
+  readonly teachersStatus: StatusEnumTeacherProps[];
+}
+
+export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
   const teacher = objectStructure as Teacher;
-  console.log(teacher);
+
   const {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm<TeacherEdit>({
     defaultValues: {
@@ -31,17 +38,22 @@ export function ModalTeachersForm() {
       email: teacher.email,
       nationalId: teacher.nationalId,
       academic: teacher.academic,
+      statusEnum: teacher.status_teacher,
     },
     resolver: zodResolver(teacherEditSchema),
   });
 
   const onSubmit: SubmitHandler<TeacherEdit> = async (data) => {
-    console.log(data);
     const updatedData = {
-      ...data,
+      academic: data.academic,
+      email: data.email,
+      name: data.name,
+      nationalId: data.nationalId,
+      status_teacher: data.statusEnum,
       birthDate: parse(data.birthDate, "dd/MM/yyyy", new Date()).toISOString(),
     };
-    // await updateStudentAction(student.id, updatedData);
+
+    await updateTeacherAction(teacher.id, updatedData);
     setIsOpen(false);
   };
   return (
@@ -89,7 +101,12 @@ export function ModalTeachersForm() {
             />
           </div>
           <div className="md:w-6/12 px-4 mb-8">
-            <InputSelect />
+            <InputSelect
+              label="Tipo de Professor"
+              name="statusEnum"
+              arrayItens={teachersStatus}
+              control={control}
+            />
           </div>
           <div className="md:w-6/12 px-4 mb-8">
             <Input
