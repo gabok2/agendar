@@ -16,9 +16,44 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { parse } from "date-fns";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { updateTeacherAction } from "./actions/updateTeacher";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 
 interface ModalTeachersFormProps {
   readonly teachersStatus: StatusEnumTeacherProps[];
+}
+
+interface FormFieldProps {
+  label: string;
+  name: keyof TeacherEdit;
+  placeholder?: string;
+  register: UseFormRegister<TeacherEdit>;
+  errors: FieldErrors<TeacherEdit>;
+  setValue: UseFormSetValue<TeacherEdit>;
+  inputMask?: (value: string) => string;
+}
+
+function FormField({
+  label,
+  name,
+  placeholder,
+  register,
+  errors,
+  setValue,
+  inputMask,
+}: FormFieldProps) {
+  return (
+    <div className="w-full md:w-6/12 px-4 mb-8">
+      <Input
+        label={label}
+        placeholder={placeholder}
+        register={register}
+        name={name}
+        error={errors[name]?.message}
+        setValue={setValue}
+        inputMask={inputMask}
+      />
+    </div>
+  );
 }
 
 export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
@@ -60,46 +95,38 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
     <Modal title="Editar Professor(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full md:w-6/12 px-4 mb-8">
-            <Input
-              placeholder="Digite o nome do aluno"
-              label="Nome"
-              register={register}
-              name="name"
-              error={errors.name?.message}
-              setValue={setValue}
-            />
-          </div>
-          <div className="w-full md:w-6/12 px-4 mb-8">
-            <Input
-              label="Data de nascimento"
-              register={register}
-              name="birthDate"
-              inputMask={maskDate}
-              error={errors.birthDate?.message}
-              setValue={setValue}
-            />
-          </div>
-          <div className="md:w-6/12 px-4 mb-8">
-            <Input
-              placeholder="abc@email.com"
-              label="Email"
-              register={register}
-              name="email"
-              error={errors.email?.message}
-              setValue={setValue}
-            />
-          </div>
-          <div className="md:w-6/12 px-4 mb-8">
-            <Input
-              placeholder="Formação acadêmica"
-              label="Formação"
-              register={register}
-              name="academic"
-              error={errors.email?.message}
-              setValue={setValue}
-            />
-          </div>
+          <FormField
+            label="Nome"
+            name="name"
+            placeholder="Digite o nome do professor"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+          />
+          <FormField
+            label="Data de nascimento"
+            name="birthDate"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            inputMask={maskDate}
+          />
+          <FormField
+            label="Email"
+            name="email"
+            placeholder="abc@email.com"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+          />
+          <FormField
+            label="Formação"
+            name="academic"
+            placeholder="Formação acadêmica"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+          />
           <div className="md:w-6/12 px-4 mb-8">
             <InputSelect
               label="Tipo de Professor"
@@ -108,17 +135,15 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
               control={control}
             />
           </div>
-          <div className="md:w-6/12 px-4 mb-8">
-            <Input
-              placeholder="Digite o CPF do aluno"
-              label="CPF"
-              register={register}
-              name="nationalId"
-              error={errors.nationalId?.message}
-              setValue={setValue}
-              inputMask={maskCPF}
-            />
-          </div>
+          <FormField
+            label="CPF"
+            name="nationalId"
+            placeholder="Digite o CPF do professor"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            inputMask={maskCPF}
+          />
         </div>
         <div className="flex justify-end space-x-8">
           <Button
