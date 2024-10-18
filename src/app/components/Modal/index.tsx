@@ -18,7 +18,7 @@ export function Modal({ isOpen, setIsOpen, title, children }: ModalProps) {
       onClose={() => setIsOpen(false)}
       className="relative z-50"
     >
-      <div className="fixed inset-0 flex items-center justify-center">
+      <div className="fixed inset-0 flex items-start pt-8 justify-center">
         <div className="fixed inset-0 bg-black opacity-50"></div>
         <DialogPanel className="relative space-y-4 border bg-white p-6 rounded-xl w-5/12 ">
           <div className="flex items-center justify-between">

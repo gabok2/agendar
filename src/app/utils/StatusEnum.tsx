@@ -4,8 +4,8 @@ interface StatusEnumProps {
 
 export function StatusEnumTeacher({ statusEnum }: StatusEnumProps) {
   const options: { [key: string]: string } = {
-    0: "Titular",
-    1: "Auxiliar",
+    1: "Titular",
+    2: "Auxiliar",
   };
 
   return options[statusEnum];

@@ -1,11 +1,19 @@
 export interface Teacher {
-  id: string;
-  type: "teachers";
-  class: string;
-  class_id: number;
+  id: number;
   created_at: string;
-  email: string;
   name: string;
-  statusTeachers: string;
+  email: string;
   status_teacher: number;
+  class_id: number | null;
+  type: string;
+  nationalId: string;
+  academic: string;
+  birthDate: string;
+  statusTeachers: string;
+  class: string | { name: string };
 }
+
+export type UpdateableTeacherFields = Pick<
+  Teacher,
+  "name" | "email" | "status_teacher" | "academic" | "birthDate" | "nationalId"
+>;

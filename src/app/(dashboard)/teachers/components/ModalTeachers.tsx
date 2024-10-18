@@ -1,12 +1,14 @@
 "use client";
-import { Modal } from "@/app/components/Modal";
 import { useStore } from "@/app/store";
+import { ModalTeachersForm } from "./ModalTeachersForm";
+import { StatusEnumTeacherProps } from "@/app/utils/types/statusTeacher";
 
-export function ModalTeachers() {
-  const { isOpen, setIsOpen } = useStore((state) => state);
-  return (
-    <Modal title="Cadastrar Professor" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <p>Professor</p>
-    </Modal>
-  );
+interface ModalTeachersProps {
+  readonly teachersStatus: StatusEnumTeacherProps[];
+}
+
+export function ModalTeachers({ teachersStatus }: ModalTeachersProps) {
+  const { isOpen } = useStore((state) => state);
+
+  return isOpen && <ModalTeachersForm teachersStatus={teachersStatus} />;
 }
