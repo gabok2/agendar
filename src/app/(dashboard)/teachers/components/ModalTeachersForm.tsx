@@ -16,13 +16,13 @@ interface ModalTeachersFormProps {
 }
 
 interface FormFieldProps {
-  label: string;
-  name: keyof TeacherEdit;
-  placeholder?: string;
-  register: UseFormRegister<TeacherEdit>;
-  errors: FieldErrors<TeacherEdit>;
-  setValue: UseFormSetValue<TeacherEdit>;
-  inputMask?: (value: string) => string;
+  readonly label: string;
+  readonly name: keyof TeacherEdit;
+  readonly placeholder?: string;
+  readonly register: UseFormRegister<TeacherEdit>;
+  readonly errors: FieldErrors<TeacherEdit>;
+  readonly setValue: UseFormSetValue<TeacherEdit>;
+  readonly inputMask?: (value: string) => string;
 }
 
 function FormField({
