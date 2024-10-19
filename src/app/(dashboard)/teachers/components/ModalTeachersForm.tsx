@@ -2,21 +2,14 @@ import { Modal } from "@/app/components/Modal";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { InputSelect } from "@/app/components/ui/InputSelect";
-
 import { useStore } from "@/app/store";
-import { DateFormat } from "@/app/utils/dateFormat";
 import { maskCPF, maskDate } from "@/app/utils/Masks";
-import {
-  TeacherEdit,
-  teacherEditSchema,
-} from "@/app/utils/schemas/TeacherEdit";
+import { TeacherEdit } from "@/app/utils/schemas/TeacherEdit";
 import { StatusEnumTeacherProps } from "@/app/utils/types/statusTeacher";
 import { Teacher } from "@/app/utils/types/teacher";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { parse } from "date-fns";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { updateTeacherAction } from "./actions/updateTeacher";
+
 import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { useTeacherForm } from "../hooks/useTeacherForm";
 
 interface ModalTeachersFormProps {
   readonly teachersStatus: StatusEnumTeacherProps[];
@@ -59,41 +52,15 @@ function FormField({
 export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
   const teacher = objectStructure as Teacher;
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    formState: { errors },
-  } = useForm<TeacherEdit>({
-    defaultValues: {
-      name: teacher.name,
-      birthDate: DateFormat(teacher.birthDate),
-      email: teacher.email,
-      nationalId: teacher.nationalId,
-      academic: teacher.academic,
-      statusEnum: teacher.status_teacher,
-    },
-    resolver: zodResolver(teacherEditSchema),
+  const { control, errors, handleSubmit, register, setValue } = useTeacherForm({
+    teacher,
+    teachersStatus,
+    setIsOpen,
   });
 
-  const onSubmit: SubmitHandler<TeacherEdit> = async (data) => {
-    const updatedData = {
-      academic: data.academic,
-      email: data.email,
-      name: data.name,
-      nationalId: data.nationalId,
-      status_teacher: data.statusEnum,
-      birthDate: parse(data.birthDate, "dd/MM/yyyy", new Date()).toISOString(),
-    };
-
-    await updateTeacherAction(teacher.id, updatedData);
-    setIsOpen(false);
-  };
   return (
     <Modal title="Editar Professor(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col w-full">
         <div className="flex flex-wrap -mx-4">
           <FormField
             label="Nome"
