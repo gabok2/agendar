@@ -3,49 +3,21 @@ import { Modal } from "@/app/components/Modal";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { useStore } from "@/app/store";
-import { DateFormat } from "@/app/utils/DateFormat";
 import { maskCPF, maskDate } from "@/app/utils/Masks";
-import {
-  EditStudents,
-  editStudentsSchema,
-} from "@/app/utils/schemas/EditStudents";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { updateStudentAction } from "./actions/updateStudent";
-import { Student } from "@/app/utils/types/student";
-import { parse } from "date-fns";
+import { useStudentForm } from "../hooks/useStudentForm";
+import { IStudent } from "../interfaces/Student";
 
 export function ModalStudentsForm() {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
-  const student = objectStructure as Student;
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<EditStudents>({
-    defaultValues: {
-      name: student.name,
-      birthDate: DateFormat(student.birthDate),
-      responsibleemail1: student.responsibleemail1,
-      responsibleemail2: student.responsibleemail2,
-      nationalId: student.nationalId,
-    },
-    resolver: zodResolver(editStudentsSchema),
+  const student = objectStructure as IStudent;
+  const { register, handleSubmit, setValue, errors } = useStudentForm({
+    student,
+    setIsOpen,
   });
 
-  const onSubmit: SubmitHandler<EditStudents> = async (data) => {
-    console.log(data);
-    const updatedData = {
-      ...data,
-      birthDate: parse(data.birthDate, "dd/MM/yyyy", new Date()).toISOString(),
-    };
-    await updateStudentAction(student.id, updatedData);
-    setIsOpen(false);
-  };
   return (
     <Modal title="Editar aluno(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col w-full">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full md:w-6/12 px-4 mb-8">
             <Input

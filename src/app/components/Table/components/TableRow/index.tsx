@@ -3,7 +3,7 @@ import { PopoverActions } from "./components/PopoverActions";
 import { Student } from "@/app/utils/types/student";
 import { Teacher } from "@/app/utils/types/teacher";
 import { Class } from "@/app/utils/types/class";
-import { DateFormat } from "@/app/utils/dateFormat";
+import { FormatDate } from "@/app/utils/DateFormat";
 
 interface Column {
   key: string;
@@ -37,7 +37,7 @@ export const TableRow = ({
       return (
         <td key={column.key} className="py-5 px-6">
           <Typography variant="body" color={color} fontWeight="semibold">
-            {column.key === "created_at" ? DateFormat(text) : text}
+            {column.key === "created_at" ? FormatDate(text) : text}
           </Typography>
         </td>
       );

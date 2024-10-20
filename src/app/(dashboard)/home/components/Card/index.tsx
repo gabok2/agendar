@@ -32,10 +32,10 @@ export function Card({ classTurm, teachers }: CardProps) {
   const activeTurms = classTurm.filter((turma) => turma.status === 0).length;
   const planningTurms = classTurm.filter((turma) => turma.status === 1).length;
   const holderTeachers = teachers.filter(
-    (teacher) => teacher.status_teacher === 0
+    (teacher) => teacher.status_teacher === 1
   ).length;
   const assistantTeachers = teachers.filter(
-    (teacher) => teacher.status_teacher === 1
+    (teacher) => teacher.status_teacher === 2
   ).length;
 
   return (

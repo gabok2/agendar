@@ -4,7 +4,7 @@ import {
   TeacherEdit,
   teacherEditSchema,
 } from "@/app/utils/schemas/TeacherEdit";
-import { DateFormat } from "@/app/utils/dateFormat";
+import { FormatDate } from "@/app/utils/DateFormat";
 import { ITeacher } from "../interfaces/Teacher";
 import { parse } from "date-fns";
 import { useCallback } from "react";
@@ -31,7 +31,7 @@ export function useTeacherForm({
   } = useForm<TeacherEdit>({
     defaultValues: {
       name: teacher.name,
-      birthDate: DateFormat(teacher.birthDate),
+      birthDate: FormatDate(teacher.birthDate),
       email: teacher.email,
       nationalId: teacher.nationalId,
       academic: teacher.academic,
