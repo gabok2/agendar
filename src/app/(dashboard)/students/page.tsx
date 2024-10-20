@@ -1,7 +1,9 @@
 import { Table } from "@/app/components/Table";
 import { ParsedUrlQuery } from "querystring";
-import { fetchStudents } from "./endpoints";
 import { ModalStudents } from "./components/ModalStudents";
+import { usePagination } from "./hooks/usePagination";
+import { useStudentSearchParams } from "./hooks/useStudentSearchParams";
+import { useStudentData } from "./hooks/useStudentData";
 
 const COLUMNS = [
   { key: "name", label: "Nome" },
@@ -11,37 +13,21 @@ const COLUMNS = [
   { key: "created_at", label: "Cadastrado em" },
 ];
 
-const DEFAULT_PAGE_SIZE = 10;
-
 interface StudentsProps {
   readonly searchParams: ParsedUrlQuery;
 }
 
 export default async function Students({ searchParams }: StudentsProps) {
-  const { page, searchTerm, pageSize } = parseSearchParams(searchParams);
-  const { students, count } = await fetchStudents(page, pageSize, searchTerm);
-  const totalPages = Math.ceil((count ?? 0) / pageSize);
-  const updatedStudents = updateStudentsData(students);
+  const { page, searchTerm, pageSize, baseUrl } =
+    useStudentSearchParams(searchParams);
+  const { updatedStudents, count } = await useStudentData(
+    page,
+    pageSize,
+    searchTerm
+  );
 
-  const baseUrl = new URLSearchParams(searchParams as Record<string, string>);
+  const totalPages = usePagination(count ?? 0, pageSize);
 
-  function parseSearchParams(searchParams: ParsedUrlQuery) {
-    const page = parseInt(searchParams.page as string) || 1;
-    const searchTerm = (searchParams.search as string) || "";
-    const pageSize =
-      parseInt(searchParams.pageSize as string) || DEFAULT_PAGE_SIZE;
-    return { page, searchTerm, pageSize };
-  }
-
-  function updateStudentsData(students: any[] | null) {
-    return (
-      students?.map((student) => ({
-        ...student,
-        class: student.class.name,
-      })) || []
-    );
-  }
-  console.log(updatedStudents);
   return (
     <div className="h-full px-12 w-full">
       <Table

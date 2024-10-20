@@ -4,54 +4,17 @@ import { Input } from "@/app/components/ui/Input";
 import { InputSelect } from "@/app/components/ui/InputSelect";
 import { useStore } from "@/app/store";
 import { maskCPF, maskDate } from "@/app/utils/Masks";
-import { TeacherEdit } from "@/app/utils/schemas/TeacherEdit";
 import { StatusEnumTeacherProps } from "@/app/utils/types/statusTeacher";
-import { Teacher } from "@/app/utils/types/teacher";
-
-import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { useTeacherForm } from "../hooks/useTeacherForm";
+import { ITeacher } from "../interfaces/Teacher";
 
 interface ModalTeachersFormProps {
   readonly teachersStatus: StatusEnumTeacherProps[];
 }
 
-interface FormFieldProps {
-  readonly label: string;
-  readonly name: keyof TeacherEdit;
-  readonly placeholder?: string;
-  readonly register: UseFormRegister<TeacherEdit>;
-  readonly errors: FieldErrors<TeacherEdit>;
-  readonly setValue: UseFormSetValue<TeacherEdit>;
-  readonly inputMask?: (value: string) => string;
-}
-
-function FormField({
-  label,
-  name,
-  placeholder,
-  register,
-  errors,
-  setValue,
-  inputMask,
-}: FormFieldProps) {
-  return (
-    <div className="w-full md:w-6/12 px-4 mb-8">
-      <Input
-        label={label}
-        placeholder={placeholder}
-        register={register}
-        name={name}
-        error={errors[name]?.message}
-        setValue={setValue}
-        inputMask={inputMask}
-      />
-    </div>
-  );
-}
-
 export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
-  const teacher = objectStructure as Teacher;
+  const teacher = objectStructure as ITeacher;
   const { control, errors, handleSubmit, register, setValue } = useTeacherForm({
     teacher,
     teachersStatus,
@@ -62,36 +25,36 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
     <Modal title="Editar Professor(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit} className="flex flex-col w-full">
         <div className="flex flex-wrap -mx-4">
-          <FormField
+          <Input
             label="Nome"
             name="name"
             placeholder="Digite o nome do professor"
             register={register}
-            errors={errors}
+            error={errors.name?.message}
             setValue={setValue}
           />
-          <FormField
+          <Input
             label="Data de nascimento"
             name="birthDate"
             register={register}
-            errors={errors}
+            error={errors.birthDate?.message}
             setValue={setValue}
             inputMask={maskDate}
           />
-          <FormField
+          <Input
             label="Email"
             name="email"
             placeholder="abc@email.com"
             register={register}
-            errors={errors}
+            error={errors.email?.message}
             setValue={setValue}
           />
-          <FormField
+          <Input
             label="Formação"
             name="academic"
             placeholder="Formação acadêmica"
             register={register}
-            errors={errors}
+            error={errors.academic?.message}
             setValue={setValue}
           />
           <div className="md:w-6/12 px-4 mb-8">
@@ -102,12 +65,12 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
               control={control}
             />
           </div>
-          <FormField
+          <Input
             label="CPF"
             name="nationalId"
             placeholder="Digite o CPF do professor"
             register={register}
-            errors={errors}
+            error={errors.nationalId?.message}
             setValue={setValue}
             inputMask={maskCPF}
           />
