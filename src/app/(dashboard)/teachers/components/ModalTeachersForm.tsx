@@ -25,39 +25,47 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
     <Modal title="Editar Professor(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit} className="flex flex-col w-full">
         <div className="flex flex-wrap -mx-4">
-          <Input
-            label="Nome"
-            name="name"
-            placeholder="Digite o nome do professor"
-            register={register}
-            error={errors.name?.message}
-            setValue={setValue}
-          />
-          <Input
-            label="Data de nascimento"
-            name="birthDate"
-            register={register}
-            error={errors.birthDate?.message}
-            setValue={setValue}
-            inputMask={maskDate}
-          />
-          <Input
-            label="Email"
-            name="email"
-            placeholder="abc@email.com"
-            register={register}
-            error={errors.email?.message}
-            setValue={setValue}
-          />
-          <Input
-            label="Formação"
-            name="academic"
-            placeholder="Formação acadêmica"
-            register={register}
-            error={errors.academic?.message}
-            setValue={setValue}
-          />
-          <div className="md:w-6/12 px-4 mb-8">
+          <div className="w-full md:w-6/12 px-4 mb-8">
+            <Input
+              label="Nome"
+              name="name"
+              placeholder="Digite o nome do professor"
+              register={register}
+              error={errors.name?.message}
+              setValue={setValue}
+            />
+          </div>
+          <div className="w-full md:w-6/12 px-4 mb-8">
+            <Input
+              label="Data de nascimento"
+              name="birthDate"
+              register={register}
+              error={errors.birthDate?.message}
+              setValue={setValue}
+              inputMask={maskDate}
+            />
+          </div>
+          <div className="w-full md:w-6/12 px-4 mb-8">
+            <Input
+              label="Email"
+              name="email"
+              placeholder="abc@email.com"
+              register={register}
+              error={errors.email?.message}
+              setValue={setValue}
+            />
+          </div>
+          <div className="w-full md:w-6/12 px-4 mb-8">
+            <Input
+              label="Formação"
+              name="academic"
+              placeholder="Formação acadêmica"
+              register={register}
+              error={errors.academic?.message}
+              setValue={setValue}
+            />
+          </div>
+          <div className="w-full md:w-6/12 px-4 mb-8">
             <InputSelect
               label="Tipo de Professor"
               name="statusEnum"
@@ -65,15 +73,17 @@ export function ModalTeachersForm({ teachersStatus }: ModalTeachersFormProps) {
               control={control}
             />
           </div>
-          <Input
-            label="CPF"
-            name="nationalId"
-            placeholder="Digite o CPF do professor"
-            register={register}
-            error={errors.nationalId?.message}
-            setValue={setValue}
-            inputMask={maskCPF}
-          />
+          <div className="w-full md:w-6/12 px-4 mb-8">
+            <Input
+              label="CPF"
+              name="nationalId"
+              placeholder="Digite o CPF do professor"
+              register={register}
+              error={errors.nationalId?.message}
+              setValue={setValue}
+              inputMask={maskCPF}
+            />
+          </div>
         </div>
         <div className="flex justify-end space-x-8">
           <Button
