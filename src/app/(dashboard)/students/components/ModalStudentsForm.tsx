@@ -5,7 +5,7 @@ import { Input } from "@/app/components/ui/Input";
 import { useStore } from "@/app/store";
 import { maskCPF, maskDate } from "@/app/utils/Masks";
 import { useStudentForm } from "../hooks/useStudentForm";
-import { IStudent } from "../interfaces/Student";
+import { IStudent } from "../interfaces/student";
 
 export function ModalStudentsForm() {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);

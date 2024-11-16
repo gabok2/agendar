@@ -1,5 +1,5 @@
-import { createStudentService } from "@/app/services/Students/StudentService";
-import { StudentRepositorySupabase } from "../repositories/StudentRepositorySupabase";
+import { createStudentService } from "@/app/services/Students/studentService";
+import { StudentRepositorySupabase } from "../repositories/studentRepositorySupabase";
 
 const studentRepository = new StudentRepositorySupabase();
 const studentService = createStudentService(studentRepository);

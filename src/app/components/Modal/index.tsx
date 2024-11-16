@@ -1,5 +1,5 @@
 "use client";
-import { Dialog, DialogPanel } from "@headlessui/react";
+import { Description, Dialog, DialogPanel } from "@headlessui/react";
 import { Typography } from "../ui/Typography";
 import { Icons } from "../ui/icons";
 import { ReactNode } from "react";
@@ -20,7 +20,7 @@ export function Modal({ isOpen, setIsOpen, title, children }: ModalProps) {
     >
       <div className="fixed inset-0 flex items-start pt-8 justify-center">
         <div className="fixed inset-0 bg-black opacity-50"></div>
-        <DialogPanel className="relative space-y-4 border bg-white p-6 rounded-xl w-5/12 ">
+        <DialogPanel className="relative   md:w-7/12  2xl:w-5/12 space-y-4 border bg-white p-6 rounded-xl  ">
           <div className="flex items-center justify-between">
             <Typography
               color="text-gray-600"
@@ -33,7 +33,9 @@ export function Modal({ isOpen, setIsOpen, title, children }: ModalProps) {
               <Icons type="X" size={24} />
             </button>
           </div>
-          {children}
+          <div className="overflow-y-auto overflow-x-hidden w-full max-h-[calc(100vh-10rem)]">
+            <Description className="w-full h-full ">{children}</Description>
+          </div>
         </DialogPanel>
       </div>
     </Dialog>

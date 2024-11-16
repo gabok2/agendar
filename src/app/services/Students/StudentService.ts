@@ -1,8 +1,8 @@
-import { IStudentRepository } from "../../(dashboard)/students/interfaces/StudentRepository";
+import { IStudentRepository } from "../../(dashboard)/students/interfaces/studentRepository";
 import {
   IStudent,
   UpdateableStudentFields,
-} from "../../(dashboard)/students/interfaces/Student";
+} from "../../(dashboard)/students/interfaces/student";
 
 export interface StudentService {
   getStudents(
@@ -15,6 +15,7 @@ export interface StudentService {
     id: string,
     updatedData: UpdateableStudentFields
   ): Promise<void>;
+  fetchStudentsByClassId(classId: number): Promise<IStudent[]>;
 }
 
 export function createStudentService(
@@ -39,9 +40,14 @@ export function createStudentService(
     await studentRepository.updateStudent(id, updatedData);
   }
 
+  async function fetchStudentsByClassId(classId: number) {
+    return studentRepository.fetchStudentsByClassId(classId);
+  }
+
   return {
     getStudents,
     deleteStudent,
     updateStudent,
+    fetchStudentsByClassId,
   };
 }

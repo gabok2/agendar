@@ -2,7 +2,7 @@ import React from "react";
 
 interface TypographyProps {
   readonly children: React.ReactNode;
-  readonly variant: "h1" | "h2" | "body" | "caption";
+  readonly variant: "h1" | "h2" | "body" | "caption" | "base";
   readonly fontWeight?: "bold" | "medium" | "regular" | "semibold";
   readonly color: string;
   readonly className?: string;
@@ -20,11 +20,12 @@ export function Typography({
     h2: "text-xl ",
     body: "text-sm",
     caption: "text-xs",
+    base: "text-base",
   };
 
   return (
     <p
-      className={`${variantClasses[variant]} ${color} font-${fontWeight} ${className}`}
+      className={`${variantClasses[variant]} ${color}  font-${fontWeight} ${className}`}
     >
       {children}
     </p>

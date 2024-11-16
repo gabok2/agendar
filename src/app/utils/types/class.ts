@@ -8,7 +8,7 @@ export interface Class {
   head_teacher: string;
   head_teacher_id: number | null;
   name: string;
-  shift: string;
+  statusShift: string;
   status: string;
   total_students: number;
 }

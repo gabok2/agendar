@@ -1,4 +1,4 @@
-import { IStudent, UpdateableStudentFields } from "./Student";
+import { IStudent, UpdateableStudentFields } from "./student";
 
 export interface IStudentRepository {
   fetchStudents(
@@ -11,4 +11,5 @@ export interface IStudentRepository {
     id: string,
     updatedData: UpdateableStudentFields
   ): Promise<void>;
+  fetchStudentsByClassId(classId: number): Promise<IStudent[]>;
 }

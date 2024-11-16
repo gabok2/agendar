@@ -38,7 +38,7 @@ export default async function Home({ searchParams }: HomeProps) {
     return (
       students?.map((student) => ({
         ...student,
-        class: student.class.name,
+        class: student.class?.name,
       })) || []
     );
   }

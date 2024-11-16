@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { IStudentRepository } from "../interfaces/StudentRepository";
-import { IStudent, UpdateableStudentFields } from "../interfaces/Student";
+import { IStudentRepository } from "../interfaces/studentRepository";
+import { IStudent, UpdateableStudentFields } from "../interfaces/student";
 import { createClientServer } from "@/app/utils/supabase/server";
 
 export class StudentRepositorySupabase implements IStudentRepository {
@@ -24,6 +24,7 @@ export class StudentRepositorySupabase implements IStudentRepository {
     }
 
     const { data: students, count } = await query;
+
     return { students, count };
   }
 
@@ -49,5 +50,22 @@ export class StudentRepositorySupabase implements IStudentRepository {
     if (error) {
       throw new Error(`Erro ao atualizar o estudante: ${error.message}`);
     }
+  }
+
+  async fetchStudentsByClassId(classId: number): Promise<IStudent[]> {
+    const cookieStore = cookies();
+    const supabase = createClientServer(cookieStore);
+
+    const { data: students, error } = await supabase
+      .from("students")
+      .select("*")
+      .eq("class_id", classId);
+
+    if (error) {
+      throw new Error(
+        `Erro ao buscar estudantes pela classe: ${error.message}`
+      );
+    }
+    return students;
   }
 }

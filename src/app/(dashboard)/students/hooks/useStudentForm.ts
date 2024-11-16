@@ -7,7 +7,7 @@ import {
 import { FormatDate } from "@/app/utils/DateFormat";
 import { parse } from "date-fns";
 import { updateStudentAction } from "../components/actions/updateStudent";
-import { IStudent } from "../interfaces/Student";
+import { IStudent } from "../interfaces/student";
 
 interface UseStudentFormProps {
   student: IStudent;

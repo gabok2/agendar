@@ -17,9 +17,6 @@ interface TableProps {
   readonly itemsPerPage: number;
   readonly baseUrl: URLSearchParams;
   readonly tableSelected?: string;
-  readonly specialColumns?: {
-    [key: string]: (value: string) => { color: string; text: string };
-  };
 }
 export function Table({
   rows,
@@ -29,7 +26,6 @@ export function Table({
   totalPages,
   baseUrl,
   tableSelected,
-  specialColumns,
 }: TableProps) {
   return (
     <section className="mt-4 pt-4 mb-6 w-ful bg-white rounded-lg shadow-sm">
@@ -39,11 +35,7 @@ export function Table({
           <thead>
             <TableHeaderColumns columns={columns} />
           </thead>
-          <TableBody
-            rows={rows}
-            columns={columns}
-            specialColumns={specialColumns}
-          />
+          <TableBody rows={rows} columns={columns} />
         </table>
       </section>
       <TableFooter
