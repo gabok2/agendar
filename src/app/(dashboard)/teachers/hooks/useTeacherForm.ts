@@ -35,7 +35,7 @@ export function useTeacherForm({
       email: teacher.email,
       nationalId: teacher.nationalId,
       academic: teacher.academic,
-      statusEnum: teachersStatus[0].id,
+      statusEnum: teacher.status_teacher,
     },
     resolver: zodResolver(teacherEditSchema),
   });

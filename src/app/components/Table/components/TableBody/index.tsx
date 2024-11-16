@@ -9,21 +9,12 @@ interface Column {
   label: string;
 }
 
-interface SpecialColumn {
-  [key: string]: (value: string) => { color: string; text: string };
-}
-
 interface TableBodyProps {
   rows: (Student | Teacher | Class)[];
   columns: Column[];
-  specialColumns?: SpecialColumn;
 }
 
-export const TableBody = ({
-  rows,
-  columns,
-  specialColumns,
-}: TableBodyProps) => (
+export const TableBody = ({ rows, columns }: TableBodyProps) => (
   <tbody>
     <tr>
       <td colSpan={columns.length + 1}>
@@ -36,7 +27,6 @@ export const TableBody = ({
         row={row}
         columns={columns}
         isEven={index % 2 === 0}
-        specialColumns={specialColumns}
       />
     ))}
     <tr>

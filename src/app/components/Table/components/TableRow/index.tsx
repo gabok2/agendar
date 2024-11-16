@@ -4,40 +4,40 @@ import { Student } from "@/app/utils/types/student";
 import { Teacher } from "@/app/utils/types/teacher";
 import { Class } from "@/app/utils/types/class";
 import { FormatDate } from "@/app/utils/DateFormat";
+import { useSpecialColumn } from "@/app/(dashboard)/classes/hooks/useSpecialColumn";
 
 interface Column {
   key: string;
   label: string;
 }
-
-interface SpecialColumn {
-  [key: string]: (value: string) => { color: string; text: string };
-}
-
 interface TableRowProps {
   row: Student | Teacher | Class | null;
   columns: Column[];
   isEven: boolean;
-  specialColumns?: SpecialColumn;
 }
 
-export const TableRow = ({
-  row,
-  columns,
-  isEven,
-  specialColumns,
-}: TableRowProps) => (
+export const TableRow = ({ row, columns, isEven }: TableRowProps) => (
   <tr className={isEven ? "bg-white" : "bg-background"}>
     {columns.map((column) => {
       const cellValue = row ? row[column.key as keyof typeof row] : "";
-      const specialColumn = specialColumns?.[column.key];
-      const { color, text } = specialColumn
-        ? specialColumn(cellValue as string)
-        : { color: "text-gray-800", text: cellValue as string };
+      const specialColumnResult = useSpecialColumn({
+        statusAdministration: cellValue as string,
+        colors: {
+          active: "text-green-400",
+          planning: "text-primary",
+          default: "text-gray-800",
+        },
+      });
       return (
         <td key={column.key} className="py-5 px-6">
-          <Typography variant="body" color={color} fontWeight="semibold">
-            {column.key === "created_at" ? FormatDate(text) : text}
+          <Typography
+            variant="body"
+            color={specialColumnResult.color}
+            fontWeight="semibold"
+          >
+            {column.key === "created_at"
+              ? FormatDate(specialColumnResult.text)
+              : specialColumnResult.text}
           </Typography>
         </td>
       );
