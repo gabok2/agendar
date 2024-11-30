@@ -25,3 +25,14 @@ export interface IStatusShift {
   created_at: string;
   name: string;
 }
+
+export interface ClassUpdates {
+  statusShift: number;
+  name: string;
+  status: number;
+  headTeacherName: string;
+  assistantName: string;
+  headTeacherId: number;
+  assistantId: number;
+  studentsIds: string[];
+}

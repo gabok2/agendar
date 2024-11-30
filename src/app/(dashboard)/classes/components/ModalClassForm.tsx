@@ -24,15 +24,18 @@ export function ModalClassForm({
 }: ModalClassFormProps) {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
   const classItem = objectStructure as IClass;
-  const { register, handleSubmit, setValue, errors, control } = useClassForm({
-    classItem,
-  });
+
+  const { register, handleSubmit, setValue, errors, control, studentsIds } =
+    useClassForm({
+      classItem,
+      setIsOpen,
+    });
 
   const { students, isLoading } = useFetchStudentData(classItem);
   const { filteredStudents, setSearch, search } = useStudentSearch(students);
 
   return (
-    <Modal title="Editar aluno(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
+    <Modal title="Editar Turma" isOpen={isOpen} setIsOpen={setIsOpen}>
       <form onSubmit={handleSubmit} className="flex flex-col w-full ">
         <div className="flex flex-row w-full -mx-4 h-[600px]">
           <div className="flex flex-col w-6/12 h-full ">
@@ -102,11 +105,15 @@ export function ModalClassForm({
             </div>
 
             <div className="overflow-y-auto">
-              <StudentList isLoading={isLoading} students={filteredStudents} />
+              <StudentList
+                isLoading={isLoading}
+                students={filteredStudents}
+                studentsIds={studentsIds}
+              />
             </div>
           </div>
         </div>
-        <div className="mt-5 pt-4  bg-white  sticky bottom-0 left-0 right-0">
+        <div className="mt-5 pt-4 bg-white  sticky bottom-0 left-0 right-0">
           <div className="flex justify-between">
             <Button
               color="blue"
