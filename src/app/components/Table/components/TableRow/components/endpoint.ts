@@ -7,5 +7,5 @@ export async function deleteTableRow(id: string, pathName: string) {
 
   await supabase.from(`${pathName}`).delete().eq("id", id).single();
 
-  return { message: "Estudante excluído com sucesso!" };
+  return { message: "excluído com sucesso!" };
 }

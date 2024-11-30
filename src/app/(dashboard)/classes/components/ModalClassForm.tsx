@@ -11,6 +11,7 @@ import { Typography } from "@/app/components/ui/Typography";
 import { useFetchStudentData } from "../hooks/useFetchStudentData";
 import FilterInput from "@/app/components/ui/FilterInput";
 import useStudentSearch from "../hooks/useStudentSearch";
+import { StudentList } from "./StudentList";
 
 interface ModalClassFormProps {
   statusClass: IStatusClass[];
@@ -23,16 +24,19 @@ export function ModalClassForm({
 }: ModalClassFormProps) {
   const { isOpen, setIsOpen, objectStructure } = useStore((state) => state);
   const classItem = objectStructure as IClass;
-  const { register, handleSubmit, setValue, errors, control } = useClassForm({
-    classItem,
-  });
 
-  const students = useFetchStudentData(classItem, isOpen);
+  const { register, handleSubmit, setValue, errors, control, studentsIds } =
+    useClassForm({
+      classItem,
+      setIsOpen,
+    });
+
+  const { students, isLoading } = useFetchStudentData(classItem);
   const { filteredStudents, setSearch, search } = useStudentSearch(students);
 
   return (
-    <Modal title="Editar aluno(a)" isOpen={isOpen} setIsOpen={setIsOpen}>
-      <form onSubmit={handleSubmit} className="flex flex-col w-full h-full ">
+    <Modal title="Editar Turma" isOpen={isOpen} setIsOpen={setIsOpen}>
+      <form onSubmit={handleSubmit} className="flex flex-col w-full ">
         <div className="flex flex-row w-full -mx-4 h-[600px]">
           <div className="flex flex-col w-6/12 h-full ">
             <div className="w-full px-4 mb-6">
@@ -81,20 +85,6 @@ export function ModalClassForm({
                 label="Status administrativo"
               />
             </div>
-            <div className="mt-auto p-4 rounded-b-xl bg-white border-t border-gray-200 absolute bottom-0 left-0 right-0">
-              <div className="flex justify-between">
-                <Button
-                  color="blue"
-                  variant="outlined"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button color="blue" variant="filled" type="submit">
-                  Atualizar
-                </Button>
-              </div>
-            </div>
           </div>
           <div className="flex flex-col pl-8 w-6/12 h-full ">
             <div>
@@ -105,7 +95,7 @@ export function ModalClassForm({
               >
                 Modifique os alunos
               </Typography>
-              <div className="w-full pt-5">
+              <div className="w-full py-5">
                 <FilterInput
                   placeholder="Buscar por nome"
                   value={search}
@@ -114,31 +104,27 @@ export function ModalClassForm({
               </div>
             </div>
 
-            <div className=" overflow-y-auto">
-              <div className="w-full pt-5 space-y-4 ">
-                {filteredStudents.map((student) => (
-                  <div key={student.id}>
-                    <Typography
-                      color="text-gray-400"
-                      fontWeight="regular"
-                      variant="body"
-                    >
-                      {student.name}
-                    </Typography>
-                    <div className="flex flex-row items-center justify-between">
-                      <Typography
-                        color="text-black"
-                        fontWeight="medium"
-                        variant="base"
-                      >
-                        Matrícula: {student.id}
-                      </Typography>
-                      <p className="text-cancel font-medium">Retirar</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="overflow-y-auto">
+              <StudentList
+                isLoading={isLoading}
+                students={filteredStudents}
+                studentsIds={studentsIds}
+              />
             </div>
+          </div>
+        </div>
+        <div className="mt-5 pt-4 bg-white  sticky bottom-0 left-0 right-0">
+          <div className="flex justify-between">
+            <Button
+              color="blue"
+              variant="outlined"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button color="blue" variant="filled" type="submit">
+              Atualizar
+            </Button>
           </div>
         </div>
       </form>

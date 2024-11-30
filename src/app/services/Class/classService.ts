@@ -14,6 +14,19 @@ export interface ClassService {
   deleteClass(id: string): Promise<void>;
   getStatusClass(): Promise<IStatusClass[]>;
   getStatusShift(): Promise<IStatusShift[]>;
+  updateClass(
+    id: string,
+    updates: {
+      statusShift: number;
+      name: string;
+      status: number;
+      headTeacherName: string;
+      assistantName: string;
+      headTeacherId: number;
+      assistantId: number;
+      studentsIds: string[];
+    }
+  ): Promise<void>;
 }
 
 export function createClassService(
@@ -39,10 +52,26 @@ export function createClassService(
     return classRepository.fetchStatusShift();
   }
 
+  async function updateClass(
+    id: string,
+    updates: {
+      statusShift: number;
+      name: string;
+      status: number;
+      headTeacherName: string;
+      assistantName: string;
+      headTeacherId: number;
+      assistantId: number;
+    }
+  ) {
+    return classRepository.updateClass(id, updates);
+  }
+
   return {
     getClasses,
     deleteClass,
     getStatusClass,
     getStatusShift,
+    updateClass,
   };
 }
